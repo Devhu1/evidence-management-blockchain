@@ -6,10 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Web3Storage, getFilesFromPath } from 'web3.storage'
 import './put-files';
-const fileData = {
-  _: [ 'testile.txt' ],
-  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDg1NkNlNUViRjI1RDkzQkQ0MjVkODU0MkMwNWYxNTZFOEZiMUQ0MzgiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjQxMjE3MzA5MjYsIm5hbWUiOiJldmlkZW5jZXRva2VuIn0.W5O6x_h2rLxSLmL8f3BNZo80LTYIGQZ6TA0xi5fJJzY'
-}
+
+
 const Complaint = () => {
 
   const contract_address = configuration.networks["5777"].address;
@@ -41,15 +39,17 @@ const Complaint = () => {
     updateEthers();
   }
   
-async function transfer (input) {
+  async function transfer () {
   // const args = minimist(process.argv.slice(2))
-  const args = input;
-  const token = args.token
+  const fileData = {
+    _: [ 'testile.txt' ],
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDg1NkNlNUViRjI1RDkzQkQ0MjVkODU0MkMwNWYxNTZFOEZiMUQ0MzgiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjQxMjE3MzA5MjYsIm5hbWUiOiJldmlkZW5jZXRva2VuIn0.W5O6x_h2rLxSLmL8f3BNZo80LTYIGQZ6TA0xi5fJJzY'
+  }
+  const args = fileData;
+  const token = fileData.token
 
   console.log("The Arguments Passed are: ");
-  console.log(args);
-
-
+  // console.log(args);
   if (!token) {
     return console.error('A token is needed. You can create one on https://web3.storage')
   }
@@ -72,7 +72,7 @@ async function transfer (input) {
   console.log('Content added with CID:', cid)
 }
 
-  const updateEthers = () => {
+const updateEthers = () => {
 
     let tempProvider = new ethers.providers.Web3Provider(window.ethereum);
     setProvider(tempProvider);
@@ -85,8 +85,15 @@ async function transfer (input) {
   }
   
   let textarea;
-  const setHandler = (event) => {
+  async function getTxn(){
+    let resultObject = await provider.getTransaction("0x5e1180074f20d876d34b7be32ea18ff4f4f76882d586107a96e61f5e7b15e19a")
+    console.log(resultObject);
+  }
+  const setHandler = async (event) => {
+
     event.preventDefault();
+    getTxn()    
+    
     let dataobject = event.target;
     let stationName = dataobject.station.value;
     let officer = dataobject.officer.value;
@@ -97,13 +104,15 @@ async function transfer (input) {
     let accusedName = dataobject.accused_name.value;
     console.log(stationName, officer, dateofComp, victimName, victimPhone, subject, accusedName, textarea);
     
-    const fileURL = '';
+    // const fileURL = '';
     // uploadToIPFS();
-    transfer(fileData)
+    // transfer(fileData)
     // console.log(event.target.setText.value);
     contract.setData(stationName, officer, dateofComp, victimName, victimPhone, accusedName, subject, textarea, 'filehash');
     // contract.setData('stationName', 'officer', 'dateofComp', 'victimName', 'victimPhone', 'accusedName', 'subject', 'details', 'filehash');
   }
+   
+  
   const getValue = async () =>{
     // let val = await contract.getValue();
     // setCurrentContractVal(val);
@@ -196,7 +205,6 @@ async function transfer (input) {
           </Form.Group>
         </Row>
         <Button type="submit">Submit form</Button>
-        <Button type="submit" onClick={getValue()}>Get Value</Button>
       </Form>
     </div>
   );
