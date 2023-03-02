@@ -1,4 +1,4 @@
-import { Web3Storage, getFilesFromPath } from 'web3.storage'
+import * as web3Storage from 'web3.storage'
 
 const fileData = {
   _: [ 'testile.txt' ],
@@ -25,11 +25,11 @@ async function transfer (input) {
     return console.error('Please supply the path to a file or directory')
   }
 
-  const storage = new Web3Storage({ token })
+  const storage = new web3Storage.Web3Storage({ token })
   const files = []
 
   for (const path of args._) {
-    const pathFiles = await getFilesFromPath(path)
+    const pathFiles = await web3Storage.getFilesFromPath(path)
     console.log("Fetched FIle Path= ", pathFiles);
     files.push(...pathFiles)
   }

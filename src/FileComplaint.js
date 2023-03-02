@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Web3Storage, getFilesFromPath } from 'web3.storage'
 import './put-files';
-
+ 
 
 const Complaint = () => {
 
